@@ -51,4 +51,12 @@ export class APIService {
 
     return Observable.throw(errObj);
   }
+
+  get(url: string, options?: any): Observable<any> {
+    return this.http
+      .get(`${this.config.apiURL}/${url}`, this.getRequestOptions(options))
+      .map(this.extractData)
+      .catch(this.handleError);
+  }
+
 }

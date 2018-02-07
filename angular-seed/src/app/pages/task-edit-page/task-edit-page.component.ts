@@ -27,12 +27,15 @@ constructor(
     });
   }
 
-onSubmit() {
-   this.todoService.create(
-     this.todoForm.get('description').value,
-     this.todoForm.get('priority').value,
-     Boolean(this.todoForm.get('completed').value)
-   );
-   this.router.navigate(['/tasks']);
- }
+  onSubmit() {
+    this.todoService.create(
+      this.todoForm.get('description').value,
+      this.todoForm.get('priority').value,
+      Boolean(this.todoForm.get('completed').value)
+    ).subscribe(serverResponse => {
+      this.router.navigate(['tasks']);
+    }, error => {
+      console.log(error);
+    });
+  }
 }

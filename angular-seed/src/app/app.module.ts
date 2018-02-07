@@ -19,12 +19,26 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpModule } from '@angular/http';
 import { APIService } from './common/api.service';
 import { UsersService } from './services/users.service';
+import { AuthService } from './common/auth.service';
+import { SignInPageComponent } from './pages/sign-in/sign-in-page.component';
+import { AppDataService } from './common/app-data.service';
+
+
 
 const ROUTES = [
-  { path: '', component: HomePageComponent },
-  { path: 'tasks', component: TaskListPageComponent },
-  { path: 'edit', component: TaskEditPageComponent },
-  { path: '**', component: PageNotFoundComponent }
+  { path: '', component: SignInPageComponent },
+  { path: 'home', component: HomePageComponent },
+  {
+    path: 'tasks', component: TaskListPageComponent,
+    canActivate: [AuthService],
+  },
+  {
+    path: 'edit', component: TaskEditPageComponent,
+    canActivate: [AuthService],
+  },
+  {
+    path: '**', component: PageNotFoundComponent
+  }
 ]
 
 @NgModule({
@@ -32,11 +46,13 @@ const ROUTES = [
    AppComponent,
    HomePageComponent,
    TaskListPageComponent,
+   SignInPageComponent,
    TaskEditPageComponent,
    PageNotFoundComponent
  ],
  imports: [
    BrowserModule,
+   HttpModule,
    NgbModule.forRoot(),
    RouterModule.forRoot(ROUTES),
    ReactiveFormsModule
@@ -48,10 +64,11 @@ const ROUTES = [
          apiURL: 'http://localhost:8080'
        }
      },
-     HttpModule,
+     AuthService,
+     AppDataService,
+     UsersService,
      TodoService,
      AppConfiguration,
-     APIService,
    ],
  bootstrap: [AppComponent]
 })
